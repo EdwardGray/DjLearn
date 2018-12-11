@@ -1,0 +1,13 @@
+{% load bbcode_tags %}
+{% for comment in comments %}
+        {% if comment.is_removed %}
+            <p class='comment-removed'>Этот комментарий был удален.</p>
+        {% else %}
+            <div class="comment">
+                <div class="user">{{ comment.user_name }}</div>
+                <div class="content">{{ comment.comment|bbcode|safe }}</div>
+                <div class="date">{{ comment.submit_date }}</div>
+            </div>
+        {% endif %}
+        <p>&nbsp;</p>
+    {% endfor %}

@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <title>{{ category.title|capfirst }}</title>
+</head>
+<body>
+
+<h1>Категория - {{category.title|capfirst}}</h1>
+<p>{{category.description}}</p>
+<h2>Продукты: </h2>
+
+{% for product in products %}
+    {% if forloop.first %}
+        <ul>
+    {% endif %}
+        <li><a href="/product/{{product.id}}">{{product.title|capfirst}}</a></li>
+    {% if forloop.last %}
+        </ul>
+    {% endif %}
+    {% empty %}
+        <p>Список продуктов данной категории пуст</p>
+    {% endfor %}
+</body>
+</html>

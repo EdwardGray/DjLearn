@@ -1,0 +1,20 @@
+{% extends 'Base.html' %}
+{% block title %}
+Удалить {{ product.category.title }}
+{% endblock %}
+
+{% block main %}
+    <h2>{{ product.title }}</h2>
+    <p class="category">Категория: {{ product.category.title|capfirst }}</p>
+    <p>Описание продукта: {{ product.description }}</p>
+    <p>{% if product.in_stock %}
+            Есть в наличии
+        {% else %}
+            Нет в наличии
+    {% endif %}</p>
+    <form action="" method="post">
+        {% csrf_token %}
+        <input type="submit" value="Удалить">
+    </form>
+    <p><a href="{% url 'category' category_id=product.category.id %}?page={{ page_num }}">Назад</a></p>
+{% endblock %}

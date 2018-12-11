@@ -1,0 +1,73 @@
+{% extends 'Base.html' %}
+{% block title %}
+{{category.name}}
+{% endblock %}
+
+{% block main %}
+    {% if messages %}
+        <ul class="message-list">
+            {% for message in messages %}
+                <li class="{{ message.tags }}">{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <h2>{{category.title}}</h2>
+    <p>{{ category.description }}</p>
+    {% if user.is_authenticated %}
+        <p><a href="{% url 'product_add' category_id=category.id %}?page={{ page_obj.number }}">Добавить товар</a></p>
+    {% endif %}
+    <table>
+        <tr>
+            <th>Название</th>
+            <th>Есть в наличии</th>
+            <th colspan="2">Действия</th>
+        </tr>
+
+        {% for product in object_list %}
+            <tr>
+                <td><a href="{% url 'product' product_id=product.id %}?page={{ page_obj.number }}">{{product.title}}</a></td>
+                <td class="centered">{% if product.in_stock %} + {% else %} - {% endif %} </td>
+                {% if perms.Army.change_product  %}
+                    <td class="centered"><a href="{% url 'product_edit' product_id=product.id %}?page={{ page_obj.number }}">
+                    Изменить
+                </a></td>
+                {% endif %}
+                {% if perms.Army.delete_product %}
+                    <td class="centered"><a href="{% url 'product_del' product_id=product.id %}?page={{ page_obj.number }}">
+                        Удалить
+                    </a></td>
+                {% endif %}
+            </tr>
+            {% empty %}
+            <tr>
+                <td class="centered" colspan="3">Нет продуктов</td>
+            </tr>
+        {% endfor %}
+
+    </table>
+    {% if paginator.num_pages > 1  %}
+        <div id="pagination">
+            {% if page_obj.has_previous %}
+                <div id="previous-page"><a href="{% url 'category' category_id=category.id %}?page={{ page_obj.previous_page_number }}">&lt;</a></div>
+            {% endif %}
+            {% if page_obj.has_next %}
+                <div id="next-page"><a href="{% url 'category' category_id=category.id %}?page={{ page_obj.next_page_number }}">&gt;</a></div>
+            {% endif %}
+            <div id="num-pages">
+                {% for pn in paginator.page_range %}
+                    {% if not forloop.first %}
+                        &nbsp;&nbsp;|&nbsp;&nbsp;
+                    {% endif %}
+                    {% if page_obj.number != pn %}
+                        <a href="{% url 'category' category_id=category.id %}?page={{ pn }}">
+                    {% endif %}
+                    {{ pn }}
+                    {% if page_obj.number != pn %}
+                        </a>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}

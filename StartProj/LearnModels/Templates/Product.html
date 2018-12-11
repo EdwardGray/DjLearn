@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <title>{{product.title|capfirst}}</title>
+</head>
+<body>
+<h1>{{product.title|capfirst}}</h1>
+<p><b>Категория:</b> {{product.category.title}}</p>
+<p><b>Описание:</b> {{product.description|capfirst}}</p>
+<p><b>В наличии:</b>
+    {% if product.in_stock %}
+        Да
+    {% else %}
+        Нет
+    {% endif %}
+</p>
+<p><a href="/categories/{{product.category.id}}">Назад</a></p>
+</body>
+</html>

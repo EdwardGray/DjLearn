@@ -1,0 +1,37 @@
+{% extends 'Base.html' %}
+{% load thumbnail %}
+{% load comments %}
+{% load bbcode_tags %}
+{% block title %}
+{{ product.category.title }} | {{ product.title }}
+{% endblock %}
+
+{% block main %}
+    <h2>{{ product.title }}</h2>
+    {% with names=product.tags.names  %}
+        {% if names.count > 0 %}
+            <p>{% for name in names %}
+                <a href="{% url 'category' category_id=product.category.id %}?tag={{ name|urlencode }}">{{ name }}</a>
+                {% endfor %}
+            </p>
+        {% endif %}
+    {% endwith %}
+    <p class="category">Категория: {{ product.category.title|capfirst }}</p>
+{#    <p>Описание продукта: {{ product.description|linebreaks }}</p>#}
+    <p>Описание продукта: {% bbcode product.description %}</p>
+    <p>{% if product.in_stock %}
+            Есть в наличии
+        {% else %}
+            Нет в наличии
+    {% endif %}</p>
+    <p>Фото <br> <img src="{{ product.thumbnail|thumbnail_url:'bw' }}" alt="{{ product.title }}"></p>
+    <p><a href="{% url 'category' category_id=product.category.id %}?page={{ page_num }}">Назад</a></p>
+    {% get_comment_count for product as prod_comm_coutn %}
+    <p>Всего комментов: {{ prod_comm_coutn }}.</p>
+    <p>&nbsp;</p>
+    {% get_comment_list for product as product_comments %}
+    {#  подгружаемый шаблон  #}
+    {% include 'comments/comments_list.html' with comments=product_comments %}
+    {% get_comment_form for product as product_comment_form %}
+    {% include 'comments/form_for_auth_users.html' with form=product_comment_form %}
+{% endblock %}

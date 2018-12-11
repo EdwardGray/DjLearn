@@ -1,0 +1,36 @@
+<!doctype html>
+{% load staticfiles %}
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <link rel="stylesheet" href="{% static "css/main.css" %}">
+    <title>{% block title %}{% endblock %}</title>
+</head>
+<body>
+<header>
+    <h1>Все для армейки</h1>
+</header>
+<div id="leftmenu">
+    {% for category in categories %}
+        {% if forloop.first %}
+            <ul>
+        {% endif %}
+        <li><a href="/category/{{category.id}}">{{category.title|capfirst}}</a></li>
+        {% if forloop.last %}
+            </ul>
+        {% endif %}
+        {% empty %}
+        <p>Список категорий пуст</p>
+    {% endfor %}
+</div>
+<div id="main">
+    {% block main %}
+    {% endblock %}
+</div>
+<footer>
+    <p>Армейка</p>
+</footer>
+</body>
+</html>

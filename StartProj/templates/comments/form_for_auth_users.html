@@ -1,0 +1,28 @@
+{% if user.is_authenticated %}
+    {% load comments %}
+    <form action="{% comment_form_target %}" method="post">
+        {% csrf_token %}
+        {% for field in form.hidden_fields %}
+            {{ field }}
+        {% endfor %}
+        {% for field in form.visible_fields %}
+            {% if field.errors.count > 0 %}
+                <div class="error-list">
+                    {{ field }}
+                </div>
+            {% endif %}
+            {% if field.name == 'honeypot' %}
+                <div style="display: none">{{ field }}</div>
+            {% elif field.name != 'name' and field.name != 'email' and field.name != 'url' %}
+                <div class="label">{{ field.label }}</div>
+                <div class="control">{{ field }}</div>
+            {% endif %}
+        {% endfor %}
+        <div class="submit-button">
+            <input type="submit" name="submit" value="Отправить">
+        </div>
+        <input type="hidden" name="next" value="{% url 'product' product_id=product.id %}?page={{ page_num }}">
+    </form>
+{% else %}
+    <p>Чтобы комментировать, выполните <a href="{% url 'login' %}">вход</a>. </p>
+{% endif %}
